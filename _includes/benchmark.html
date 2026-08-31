@@ -11,30 +11,32 @@
   <p><strong>Source:</strong> <a href="https://github.com/SparseArrayProgrammingSuite/SparseArrayProgrammingSuite/blob/main/{{ benchmark.file }}"><code>{{ benchmark.file }}</code></a></p>
 
   {% if benchmark.concepts contains "<concept>" %}
-    <p><strong>ACM Computing Classification System</strong></p>
+    <p class="ccs-label">ACM Computing Classification System</p>
     <div class="ccs-concepts">{{ benchmark.concepts | replace: "~", " › " }}</div>
   {% endif %}
 
   {% if benchmark.motivation and benchmark.motivation != "" %}
-    <h3>Motivation</h3>
-    {{ benchmark.motivation | markdownify }}
+    <div class="benchmark-motivation">
+      <span class="benchmark-motivation__label">Motivation</span>
+      <div>{{ benchmark.motivation | markdownify }}</div>
+    </div>
   {% endif %}
 
   {% if benchmark.generators and benchmark.generators.size > 0 %}
-    <details class="generator-disclosure">
-      <summary>Input generators ({{ benchmark.generators.size }})</summary>
-      <div class="benchmark-generators">
-        {% for generator in benchmark.generators %}
-          <section class="benchmark-generator">
-            <h4>{{ generator.pretty_name | default: generator.name }}</h4>
+    <h3>Input generators ({{ benchmark.generators.size }})</h3>
+    <div class="benchmark-generators">
+      {% for generator in benchmark.generators %}
+        <details class="benchmark-generator">
+          <summary>{{ generator.pretty_name | default: generator.name }}</summary>
+          <div class="benchmark-generator__description">
             {{ generator.description | markdownify }}
             {% if generator.motivation and generator.motivation != "" %}
               {{ generator.motivation | markdownify }}
             {% endif %}
-          </section>
-        {% endfor %}
-      </div>
-    </details>
+          </div>
+        </details>
+      {% endfor %}
+    </div>
   {% endif %}
 
   {% if benchmark.references and benchmark.references.size > 0 %}

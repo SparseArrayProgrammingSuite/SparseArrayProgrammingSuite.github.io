@@ -3,6 +3,9 @@ title: "Benchmarks"
 permalink: /benchmarks/
 layout: single
 author_profile: false
+classes:
+  - wide
+  - benchmark-catalog
 ---
 
 The suite adapts real applications to a portable array-programming style. This catalog is generated from [`metadata.json`](https://github.com/SparseArrayProgrammingSuite/SparseArrayProgrammingSuite/blob/main/metadata.json) in the main repository.

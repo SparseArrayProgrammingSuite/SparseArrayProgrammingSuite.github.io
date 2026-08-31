@@ -7,6 +7,20 @@
 @import "minimal-mistakes/skins/default";
 @import "minimal-mistakes";
 
+// Keep page content near the viewport edge instead of centering it in the
+// theme's 1280px content shell.
+#main {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 2rem;
+}
+
+@media (max-width: 42rem) {
+  #main {
+    padding-inline: 1.1rem;
+  }
+}
+
 // This site does not use Minimal Mistakes' author/sidebar rail.
 @media (min-width: 64em) {
   .page,

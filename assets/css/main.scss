@@ -1,0 +1,95 @@
+---
+# This front matter is required for Jekyll to process the stylesheet.
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes";
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 64em) {
+  html {
+    font-size: 15px;
+  }
+}
+
+#main,
+.masthead__inner-wrap,
+.page__footer footer {
+  max-width: 1440px;
+}
+
+.page {
+  float: none;
+  width: 100%;
+  padding-right: 0;
+}
+
+.page__inner-wrap {
+  max-width: none;
+}
+
+.benchmark {
+  margin: 0 0 1rem;
+  padding: 0.25rem 1rem;
+  border: 1px solid #d9d9e3;
+  border-radius: 0.4rem;
+}
+
+.benchmark > summary {
+  padding: 0.85rem 0;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.generator-disclosure {
+  margin: 1rem 0;
+}
+
+.generator-disclosure > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.ccs-concepts ccs2012,
+.ccs-concepts concept,
+.ccs-concepts concept_desc {
+  display: block;
+}
+
+.ccs-concepts concept {
+  margin: 0.35rem 0;
+}
+
+.ccs-concepts concept_desc::before {
+  content: "• ";
+}
+
+.ccs-concepts concept_id,
+.ccs-concepts concept_significance {
+  display: none;
+}
+
+.benchmark-generators {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 2rem;
+}
+
+.benchmark-generator {
+  padding: 0.9rem 1rem;
+  border-left: 3px solid #6f42c1;
+  background: #f7f5fb;
+}
+
+.benchmark-generator h4 {
+  margin: 0 0 0.35rem;
+}
+
+.benchmark-generator p:last-child {
+  margin-bottom: 0;
+}

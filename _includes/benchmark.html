@@ -1,0 +1,46 @@
+{% assign benchmark = include.benchmark %}
+<details class="benchmark">
+  <summary>{{ benchmark.pretty_name | default: benchmark.name }}</summary>
+
+  {{ benchmark.description | markdownify }}
+
+  {% if benchmark.authors and benchmark.authors.size > 0 %}
+    <p><strong>Authors:</strong> {{ benchmark.authors | join: ", " }}</p>
+  {% endif %}
+
+  <p><strong>Source:</strong> <a href="https://github.com/SparseArrayProgrammingSuite/SparseArrayProgrammingSuite/blob/main/{{ benchmark.file }}"><code>{{ benchmark.file }}</code></a></p>
+
+  {% if benchmark.concepts contains "<concept>" %}
+    <p><strong>ACM Computing Classification System</strong></p>
+    <div class="ccs-concepts">{{ benchmark.concepts | replace: "~", " › " }}</div>
+  {% endif %}
+
+  {% if benchmark.motivation and benchmark.motivation != "" %}
+    <h3>Motivation</h3>
+    {{ benchmark.motivation | markdownify }}
+  {% endif %}
+
+  {% if benchmark.generators and benchmark.generators.size > 0 %}
+    <details class="generator-disclosure">
+      <summary>Input generators ({{ benchmark.generators.size }})</summary>
+      <div class="benchmark-generators">
+        {% for generator in benchmark.generators %}
+          <section class="benchmark-generator">
+            <h4>{{ generator.pretty_name | default: generator.name }}</h4>
+            {{ generator.description | markdownify }}
+            {% if generator.motivation and generator.motivation != "" %}
+              {{ generator.motivation | markdownify }}
+            {% endif %}
+          </section>
+        {% endfor %}
+      </div>
+    </details>
+  {% endif %}
+
+  {% if benchmark.references and benchmark.references.size > 0 %}
+    <h3>References</h3>
+    <ol>
+      {% for reference in benchmark.references %}<li>{{ reference }}</li>{% endfor %}
+    </ol>
+  {% endif %}
+</details>

@@ -43,6 +43,8 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+      - name: Fetch benchmark metadata
+        run: curl --fail --silent --show-error --location --output _data/metadata.json https://raw.githubusercontent.com/SparseArrayProgrammingSuite/SparseArrayProgrammingSuite/main/metadata.json
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"

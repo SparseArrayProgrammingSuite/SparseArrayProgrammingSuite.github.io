@@ -1,0 +1,9 @@
+main:
+  - title: "Home"
+    url: /
+  - title: "Benchmarks"
+    url: /benchmarks/
+  - title: "Leaderboard"
+    url: /leaderboard/
+  - title: "GitHub"
+    url: https://github.com/SparseArrayProgrammingSuite/SparseArrayProgrammingSuite

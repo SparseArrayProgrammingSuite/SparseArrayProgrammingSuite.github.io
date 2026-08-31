@@ -23,15 +23,15 @@
 
 
 .benchmark {
-  margin: 0 0 1rem;
-  padding: 0.25rem 1rem;
+  margin: 0 0 0.5rem;
+  padding: 0.1rem 0.55rem;
   border: 1px solid #d9d9e3;
-  border-radius: 0.4rem;
+  border-radius: 0.3rem;
   font-size: 0.6em;
 }
 
 .benchmark > summary {
-  padding: 0.85rem 0;
+  padding: 0.4rem 0;
   cursor: pointer;
   font-size: 1.15em;
   font-weight: 700;
@@ -56,22 +56,13 @@
   display: none;
 }
 
-.ccs-label {
-  margin-bottom: 0.25rem;
-  color: #666;
-  font-size: 0.78em;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
 .ccs-concepts {
-  margin-bottom: 1rem;
   color: #666;
   font-size: 0.78em;
   line-height: 1.35;
 }
 
+.benchmark-meta,
 .benchmark-motivation {
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -80,6 +71,15 @@
   margin: 1rem 0;
 }
 
+.benchmark-meta {
+  margin: 0.55rem 0;
+}
+
+.benchmark-meta--top {
+  align-items: start;
+}
+
+.benchmark-meta__label,
 .benchmark-motivation__label {
   padding: 0.2rem 0.55rem;
   border-radius: 999px;

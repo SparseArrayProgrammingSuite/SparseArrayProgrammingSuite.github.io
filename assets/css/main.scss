@@ -62,16 +62,11 @@
   line-height: 1.35;
 }
 
-.benchmark-meta,
-.benchmark-motivation {
+.benchmark-meta {
   display: grid;
-  grid-template-columns: max-content 1fr;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
   gap: 0.75rem;
   align-items: start;
-  margin: 1rem 0;
-}
-
-.benchmark-meta {
   margin: 0.55rem 0;
 }
 
@@ -79,8 +74,10 @@
   align-items: start;
 }
 
-.benchmark-meta__label,
-.benchmark-motivation__label {
+.benchmark-meta__label {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
   background: #ece7f6;
@@ -91,8 +88,17 @@
   text-transform: uppercase;
 }
 
-.benchmark-motivation p {
+.benchmark-meta p {
   margin: 0;
+}
+
+.benchmark-references {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.benchmark-references li + li {
+  margin-top: 0.35rem;
 }
 
 .benchmark-generators {

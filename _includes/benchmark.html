@@ -24,9 +24,18 @@
   {% endif %}
 
   {% if benchmark.motivation and benchmark.motivation != "" %}
-    <div class="benchmark-motivation">
-      <span class="benchmark-motivation__label">Motivation</span>
+    <div class="benchmark-meta benchmark-meta--top">
+      <span class="benchmark-meta__label">Motivation</span>
       <div>{{ benchmark.motivation | markdownify }}</div>
+    </div>
+  {% endif %}
+
+  {% if benchmark.references and benchmark.references.size > 0 %}
+    <div class="benchmark-meta benchmark-meta--top">
+      <span class="benchmark-meta__label">References</span>
+      <ol class="benchmark-references">
+        {% for reference in benchmark.references %}<li>{{ reference }}</li>{% endfor %}
+      </ol>
     </div>
   {% endif %}
 
@@ -38,8 +47,42 @@
           <summary>{{ generator.pretty_name | default: generator.name }}</summary>
           <div class="benchmark-generator__description">
             {{ generator.description | markdownify }}
+
+            {% if generator.authors and generator.authors.size > 0 %}
+              <div class="benchmark-meta">
+                <span class="benchmark-meta__label">Authors</span>
+                <span>{{ generator.authors | join: ", " | escape }}</span>
+              </div>
+            {% endif %}
+
+            {% if generator.file and generator.file != "" %}
+              <div class="benchmark-meta">
+                <span class="benchmark-meta__label">Source</span>
+                <a href="https://github.com/SparseArrayProgrammingSuite/SparseArrayProgrammingSuite/blob/main/{{ generator.file }}"><code>{{ generator.file }}</code></a>
+              </div>
+            {% endif %}
+
+            {% if generator.concepts contains "<concept>" %}
+              <div class="benchmark-meta benchmark-meta--top">
+                <span class="benchmark-meta__label">ACM CCS</span>
+                <div class="ccs-concepts">{{ generator.concepts | replace: "~", " › " }}</div>
+              </div>
+            {% endif %}
+
             {% if generator.motivation and generator.motivation != "" %}
-              {{ generator.motivation | markdownify }}
+              <div class="benchmark-meta benchmark-meta--top">
+                <span class="benchmark-meta__label">Motivation</span>
+                <div>{{ generator.motivation | markdownify }}</div>
+              </div>
+            {% endif %}
+
+            {% if generator.references and generator.references.size > 0 %}
+              <div class="benchmark-meta benchmark-meta--top">
+                <span class="benchmark-meta__label">References</span>
+                <ol class="benchmark-references">
+                  {% for reference in generator.references %}<li>{{ reference }}</li>{% endfor %}
+                </ol>
+              </div>
             {% endif %}
           </div>
         </details>
@@ -47,10 +90,4 @@
     </div>
   {% endif %}
 
-  {% if benchmark.references and benchmark.references.size > 0 %}
-    <h3>References</h3>
-    <ol>
-      {% for reference in benchmark.references %}<li>{{ reference }}</li>{% endfor %}
-    </ol>
-  {% endif %}
 </details>

@@ -54,6 +54,7 @@ jobs:
             --export \
             --format svg \
             --page-index 0 \
+            --crop \
             --transparent \
             --theme light \
             --embed-svg-fonts false \
@@ -63,6 +64,7 @@ jobs:
             --export \
             --format svg \
             --page-index 1 \
+            --crop \
             --transparent \
             --theme light \
             --embed-svg-fonts false \

@@ -53,7 +53,7 @@ jobs:
           xvfb-run -a drawio \
             --export \
             --format svg \
-            --page-index 0 \
+            --page-index 1 \
             --crop \
             --transparent \
             --theme light \
@@ -63,7 +63,7 @@ jobs:
           xvfb-run -a drawio \
             --export \
             --format svg \
-            --page-index 1 \
+            --page-index 2 \
             --crop \
             --transparent \
             --theme light \

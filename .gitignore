@@ -4,3 +4,5 @@ _site
 .jekyll-metadata
 vendor
 *.bkp
+assets/SAPSIcon.svg
+assets/SAPSLogo.svg

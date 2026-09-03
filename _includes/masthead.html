@@ -3,7 +3,7 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         <a class="site-title saps-brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">
-          <img class="saps-brand__icon" src="{{ '/assets/SAPSIcon.svg' | relative_url }}" alt="" width="151" height="152">
+          {% include saps-icon.svg %}
           <span class="saps-brand__text" aria-hidden="true">SAPS</span>
           <span class="visually-hidden">{{ site.title }}</span>
         </a>

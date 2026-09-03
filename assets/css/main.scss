@@ -24,23 +24,43 @@
 .greedy-nav .site-title.saps-brand {
   display: inline-flex;
   align-items: center;
+  gap: 0.18rem;
   flex: 0 0 auto;
   margin-right: 1rem;
   padding: 0;
 }
 
-.saps-brand__logo {
+.saps-brand__icon {
   display: block;
   width: auto;
-  max-width: min(8.75rem, 38vw);
-  height: 2.05rem;
-  object-fit: contain;
+  height: 1.85rem;
 }
 
-@media (max-width: 30rem) {
-  .saps-brand__logo {
-    max-width: 2rem;
-    height: 2rem;
+.saps-brand__text {
+  color: #808080;
+  font-family: "Pixelify Sans", "Courier New", monospace;
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 52rem) {
+  .saps-brand__icon {
+    height: 1.8rem;
+  }
+
+  .saps-brand__text {
+    display: none;
+  }
+
+  .greedy-nav .visible-links {
+    flex: 0 1 auto;
+    gap: 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .greedy-nav .visible-links .masthead__menu-item:last-child {
+    display: none;
   }
 }
 

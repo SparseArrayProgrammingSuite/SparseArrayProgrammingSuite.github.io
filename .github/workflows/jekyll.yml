@@ -40,6 +40,25 @@ jobs:
           ruby-version: '3.4' # Bundler 4 requires Ruby 3.2 or newer
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           cache-version: 0 # Increment this number if you need to re-download cached gems
+      - name: Install draw.io
+        run: |
+          DRAWIO_VERSION=30.0.4
+          curl -L --fail --show-error --silent \
+            -o /tmp/drawio.deb \
+            "https://github.com/jgraph/drawio-desktop/releases/download/v${DRAWIO_VERSION}/drawio-amd64-${DRAWIO_VERSION}.deb"
+          sudo apt-get update
+          sudo apt-get install -y xvfb /tmp/drawio.deb
+      - name: Export SAPC logo
+        run: |
+          xvfb-run -a drawio \
+            --export \
+            --format svg \
+            --transparent \
+            --theme light \
+            --embed-svg-fonts false \
+            --output assets/SAPCLogo.svg \
+            SAPCLogo.drawio
+          ruby -e 'path = "assets/SAPCLogo.svg"; svg = File.read(path); svg.sub!(/\sstyle="background:\s*transparent;\s*background-color:\s*transparent;\s*color-scheme:[^"]*"/, ""); File.write(path, svg)'
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5

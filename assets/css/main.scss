@@ -21,6 +21,28 @@
   }
 }
 
+.greedy-nav .site-title.saps-brand {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-right: 1rem;
+  padding: 0;
+}
+
+.saps-brand__logo {
+  display: block;
+  width: min(11.75rem, 46vw);
+  height: auto;
+  max-height: 2.45rem;
+}
+
+@media (max-width: 30rem) {
+  .saps-brand__logo {
+    width: 2.15rem;
+    max-height: 2.15rem;
+  }
+}
+
 
 .benchmark {
   margin: 0 0 0.5rem;

@@ -11,7 +11,17 @@ The suite adapts real applications to a portable array-programming style. This c
 {% assign benchmarks = site.data.metadata.benchmarks %}
 {% if benchmarks and benchmarks.size > 0 %}
   {% for benchmark in benchmarks %}
-    {% include benchmark.html benchmark=benchmark %}
+    {% assign has_standard_dataset = false %}
+    {% for generator in benchmark.generators %}
+      {% for dataset in generator.datasets %}
+        {% if dataset.tags contains "standard" %}
+          {% assign has_standard_dataset = true %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+    {% if has_standard_dataset %}
+      {% include benchmark.html benchmark=benchmark %}
+    {% endif %}
   {% endfor %}
 {% else %}
 Benchmark metadata is unavailable in this local build. The deployed site fetches it automatically from the main repository.

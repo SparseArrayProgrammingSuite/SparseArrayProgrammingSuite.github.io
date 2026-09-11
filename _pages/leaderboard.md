@@ -348,15 +348,16 @@ author_profile: false
   }});
 
   define({id: "a415e9ad", inputs: ["total","html","Plot","ok","width","profile","curves","display"], body: async (total,html,Plot,ok,width,profile,curves,display) => {
+    const plotData = curves.length ? curves : [{framework: "", ratio: 1, pct: 0}, {framework: "", ratio: 1, pct: 0}];
     display(await (
-      total === 0 ? html`<p role="status">No problems match these tags.</p>` : Plot.plot({
+      Plot.plot({
         title: `${ok.filter(Boolean).length} problems`,
         width,
-        x: {type: "log", domain: [1, profile.xMax], label: "Ratio (runtime / best runtime)"},
+        x: {type: "log", domain: [1, Math.max(1, profile.xMax)], label: "Ratio (runtime / best runtime)"},
         y: {domain: [0, 100], grid: true, label: "% of suite completed"},
         color: {legend: true, domain: Object.keys(profile.series)},
         marks: [
-          Plot.line(curves, {
+          Plot.line(plotData, {
             x: "ratio",
             y: "pct",
             stroke: "framework",

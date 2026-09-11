@@ -46,6 +46,19 @@ const page = readFileSync(new URL("../docs/index.md", import.meta.url), "utf8");
 const cell = [...page.matchAll(/```js\n([\s\S]*?)\n```/g)].map((match) => match[1]).find((code) => code.includes("const ok ="));
 const curvesFor = new Function("profile", "keep", "drop", `${cell}\nreturn {curves, total};`);
 
+test("the page awaits both CSVs and the run metadata before building the profile", async () => {
+  const loadCell = [...page.matchAll(/```js\n([\s\S]*?)\n```/g)][0][1].replace(/^import .*;\n/m, "");
+  const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+  const load = new AsyncFunction("FileAttachment", "buildProfile", `${loadCell}\nreturn profile;`);
+  const files = {
+    "./data/results.csv": [result("one", "a", "1")],
+    "./data/benchmarks.csv": [description("one")],
+    "./data/run.json": {frameworks: ["a", "failed"]}
+  };
+  const profile = await load((path) => ({csv: async () => files[path], json: async () => files[path]}), buildProfile);
+  assert.deepEqual(profile.series, {a: [[0, 1]], failed: []});
+});
+
 test("the plot weights benchmarks equally and recomputes weights after tag filtering", () => {
   const profile = {xMax: 2, problems: [
     {benchmark: "A", tags: ["dense"]}, {benchmark: "A", tags: ["sparse"]},

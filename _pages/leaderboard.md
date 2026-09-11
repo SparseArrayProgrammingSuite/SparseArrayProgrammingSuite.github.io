@@ -32,32 +32,73 @@ author_profile: false
   .saps-observable .observablehq--block form {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 0.85rem;
-    align-items: center;
+    gap: 0.75rem;
+    align-items: flex-start;
     margin: 0;
   }
-  .saps-observable .observablehq--block form {
+  .saps-tag-menu {
+    display: inline-block;
+    min-width: 12rem;
+    max-width: 18rem;
+    position: relative;
+  }
+  .saps-tag-menu summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid #d9d9e3;
+    border-radius: 999px;
+    background: #f6f3fb;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #4f2f82;
+    font-weight: 700;
+  }
+  .saps-tag-menu summary::-webkit-details-marker { display: none; }
+  .saps-tag-menu summary::after {
+    content: "▾";
+    font-size: 0.8rem;
+  }
+  .saps-tag-menu[open] summary::after {
+    content: "▴";
+  }
+  .saps-tag-menu .inputs-3a86ea-checkbox {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    width: min(18rem, 100%);
-    padding: 0.55rem 0.75rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0.6rem 0.7rem;
     border: 1px solid #d9d9e3;
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0 0.5rem 1rem rgba(30, 30, 30, 0.06);
+    position: absolute;
+    z-index: 20;
   }
-  .saps-observable .observablehq--block form > label {
+  .saps-tag-menu .inputs-3a86ea-checkbox > label {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    width: 100%;
+    gap: 0.4rem;
     font-size: 0.8rem;
     color: #2b2b2b;
     font-weight: 500;
+    white-space: nowrap;
   }
-  .saps-observable .observablehq--block input[type="checkbox"] {
-    margin: 0 0.45rem 0 0;
+  .saps-tag-menu .inputs-3a86ea-checkbox > label:first-child {
+    display: none;
+  }
+  .saps-tag-menu input[type="checkbox"] {
+    margin: 0 0.35rem 0 0;
+  }
+  @media (max-width: 42rem) {
+    .saps-tag-menu { min-width: 100%; }
+    .saps-tag-menu .inputs-3a86ea-checkbox { width: min(18rem, calc(100vw - 4rem)); }
   }
 </style>
 <link rel="stylesheet" type="text/css" href="{{ '/assets/leaderboard/_observablehq/stdlib/inputs.f7bf0e12.css' | relative_url }}">
@@ -103,8 +144,46 @@ author_profile: false
     const allTags = [...new Set(profile.problems.flatMap((p) => p.tags))]
       .filter((tag) => !hiddenTags.has(tag))
       .sort();
+
     const keep = view(Inputs.checkbox(allTags, {label: "Include tags", value: allTags}));
     const drop = view(Inputs.checkbox(allTags, {label: "Exclude tags", value: []}));
+
+    const wrapMenu = (form, labelText) => {
+      if (!form || form.closest('.saps-tag-menu')) return;
+      const wrapper = document.createElement('details');
+      wrapper.className = 'saps-tag-menu';
+      wrapper.open = true;
+
+      const summary = document.createElement('summary');
+      summary.textContent = labelText;
+
+      form.replaceWith(wrapper);
+      wrapper.append(summary, form);
+    };
+
+    queueMicrotask(() => {
+      const root = document.querySelector('#observablehq-main');
+      if (!root) return;
+
+      const wrapVisibleForms = () => {
+        const forms = [...root.querySelectorAll('form')];
+        forms.forEach((form) => {
+          const label = form.querySelector('label');
+          const labelText = label?.textContent?.trim();
+          if (!labelText || !/Include tags|Exclude tags/.test(labelText)) return;
+          if (form.closest('.saps-tag-menu')) return;
+          wrapMenu(form, labelText);
+        });
+      };
+
+      wrapVisibleForms();
+
+      const observer = new MutationObserver(() => {
+        wrapVisibleForms();
+      });
+      observer.observe(root, {childList: true, subtree: true});
+    });
+
     return {allTags, keep: keep ?? [], drop: drop ?? []};
   }});
 

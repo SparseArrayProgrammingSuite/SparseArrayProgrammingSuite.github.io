@@ -187,7 +187,7 @@ author_profile: false
     <div class="observablehq observablehq--block"><!--:7ebc449c:--></div>
     <div class="observablehq observablehq--block"><!--:2d01d479:--></div>
     <div class="observablehq observablehq--block"><observablehq-loading></observablehq-loading><!--:a415e9ad:--></div>
-    <p>At 1×, a framework matches the fastest runtime for a problem. At 2×, it takes at most twice as long. Failed measurements remain in the suite but do not contribute successes. Include tags match any selection; exclude tags take precedence.</p>
+    <p>At 1×, a framework matches the fastest runtime for a problem. At 2×, it takes at most twice as long. Failed measurements remain in the suite but do not contribute successes. Include tags match any selection; exclude tags must be absent.</p>
   </main>
 </div>
 
@@ -239,7 +239,7 @@ author_profile: false
       "dynamic-sparsity"
     ]);
 
-    const keep = view(Inputs.checkbox(allTags, {label: "Include tags", value: allTags}));
+    const keep = view(Inputs.checkbox(allTags, {label: "Include tags", value: []}));
     const drop = view(Inputs.checkbox(allTags, {label: "Exclude tags", value: []}));
 
     const wrapMenu = (form, labelText) => {
@@ -254,40 +254,6 @@ author_profile: false
 
       const panel = document.createElement('div');
       panel.className = 'saps-tag-menu__panel';
-
-      const actions = document.createElement('div');
-      actions.className = 'saps-tag-menu__actions';
-
-      const selectAll = document.createElement('button');
-      selectAll.type = 'button';
-      selectAll.className = 'saps-tag-menu__action';
-      selectAll.textContent = 'Select all';
-
-      const deselectAll = document.createElement('button');
-      deselectAll.type = 'button';
-      deselectAll.className = 'saps-tag-menu__action';
-      deselectAll.textContent = 'Deselect all';
-
-      const applySelection = (checked) => {
-        const boxes = [...form.querySelectorAll('input[type="checkbox"]')];
-        boxes.forEach((box) => {
-          if (box.checked !== checked) {
-            box.checked = checked;
-            box.dispatchEvent(new Event('input', {bubbles: true}));
-            box.dispatchEvent(new Event('change', {bubbles: true}));
-          }
-        });
-      };
-
-      selectAll.addEventListener('click', (event) => {
-        event.preventDefault();
-        applySelection(true);
-      });
-
-      deselectAll.addEventListener('click', (event) => {
-        event.preventDefault();
-        applySelection(false);
-      });
 
       const sectionOrder = ['workload', 'concepts'];
       const sectionMap = new Map();
@@ -324,8 +290,7 @@ author_profile: false
 
       parent.insertBefore(wrapper, form);
       wrapper.append(summary, panel);
-      actions.append(selectAll, deselectAll);
-      panel.append(actions, form);
+      panel.append(form);
     };
 
     queueMicrotask(() => {
@@ -369,7 +334,7 @@ author_profile: false
     const curves = total === 0 ? [] : Object.entries(profile.series).flatMap(([framework, points]) => {
       let cum = 0;
       const pts = points
-        .filter(([i]) => ok[i])
+        .filter(([i, ratio]) => ok[i] && ratio <= 100)
         .map(([i, ratio]) => ({
           framework,
           ratio,

@@ -31,6 +31,7 @@ export function buildProfile(results, benchmarks, frameworkNames = results.map((
     for (const [framework, value] of runtimes) {
       const ratio = value / best;
       if (!Number.isFinite(ratio)) throw new Error("Nonfinite runtime ratio");
+      if (ratio > 100) continue;
       series[framework].push([i, ratio]);
       xMax = Math.max(xMax, ratio);
     }

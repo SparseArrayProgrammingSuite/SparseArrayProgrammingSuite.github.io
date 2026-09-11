@@ -26,6 +26,39 @@ author_profile: false
   .saps-observable a {
     color: inherit;
   }
+  .saps-observable .observablehq--block {
+    margin: 0 0 0.75rem;
+  }
+  .saps-observable .observablehq--block form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.85rem;
+    align-items: center;
+    margin: 0;
+  }
+  .saps-observable .observablehq--block form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: min(18rem, 100%);
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #d9d9e3;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 0.5rem 1rem rgba(30, 30, 30, 0.06);
+  }
+  .saps-observable .observablehq--block form > label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    font-size: 0.8rem;
+    color: #2b2b2b;
+    font-weight: 500;
+  }
+  .saps-observable .observablehq--block input[type="checkbox"] {
+    margin: 0 0.45rem 0 0;
+  }
 </style>
 <link rel="stylesheet" type="text/css" href="{{ '/assets/leaderboard/_observablehq/stdlib/inputs.f7bf0e12.css' | relative_url }}">
 
@@ -66,10 +99,13 @@ author_profile: false
   }});
 
   define({id: "7ebc449c", inputs: ["profile","view","Inputs"], outputs: ["allTags","keep","drop"], body: (profile,view,Inputs) => {
-    const allTags = [...new Set(profile.problems.flatMap((p) => p.tags))].sort();
-    const keep = view(Inputs.checkbox(allTags, {label: "Include tags"}));
-    const drop = view(Inputs.checkbox(allTags, {label: "Exclude tags"}));
-    return {allTags,keep,drop};
+    const hiddenTags = new Set(["standard", "test", "trace"]);
+    const allTags = [...new Set(profile.problems.flatMap((p) => p.tags))]
+      .filter((tag) => !hiddenTags.has(tag))
+      .sort();
+    const keep = view(Inputs.checkbox(allTags, {label: "Include tags", value: allTags}));
+    const drop = view(Inputs.checkbox(allTags, {label: "Exclude tags", value: []}));
+    return {allTags, keep: keep ?? [], drop: drop ?? []};
   }});
 
   define({id: "2d01d479", inputs: ["profile","keep","drop"], outputs: ["ok","nKept","total","curves"], body: (profile,keep,drop) => {
@@ -121,4 +157,5 @@ author_profile: false
       })
     ))
   }});
+
 </script>

@@ -38,9 +38,9 @@ author_profile: false
   }
   .saps-tag-menu {
     display: inline-block;
-    min-width: 14rem;
-    width: 14rem;
-    max-width: 16rem;
+    min-width: 11.5rem;
+    width: 11.5rem;
+    max-width: 14rem;
     position: relative;
     vertical-align: top;
   }
@@ -52,11 +52,11 @@ author_profile: false
     justify-content: space-between;
     gap: 0.45rem;
     width: 100%;
-    padding: 0.45rem 0.85rem;
+    padding: 0.4rem 0.75rem;
     border: 1px solid #d9d9e3;
     border-radius: 999px;
     background: #f6f3fb;
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: #4f2f82;
@@ -72,14 +72,8 @@ author_profile: false
   .saps-tag-menu[open] summary::after {
     content: "▴";
   }
-  .saps-tag-menu .inputs-3a86ea-checkbox {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
+  .saps-tag-menu__panel {
     margin-top: 0.5rem;
-    width: 100%;
-    max-width: 100%;
-    min-width: 12rem;
     padding: 0.7rem 0.8rem;
     border: 1px solid #d9d9e3;
     border-radius: 0.75rem;
@@ -89,15 +83,60 @@ author_profile: false
     left: 0;
     z-index: 20;
     box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 12rem;
+  }
+  .saps-tag-menu__actions {
+    display: flex;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 30;
+  }
+  .saps-tag-menu__action {
+    appearance: none;
+    border: 1px solid #d9d9e3;
+    border-radius: 999px;
+    background: #f6f3fb;
+    color: #4f2f82;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.28rem 0.5rem;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+  .saps-tag-menu .inputs-3a86ea-checkbox {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 12rem;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    position: static;
+    z-index: auto;
+    box-sizing: border-box;
   }
   .saps-tag-menu + .saps-tag-menu {
-    margin-left: 0.75rem;
+    margin-left: 0;
+  }
+  @media (min-width: 42rem) {
+    .saps-tag-menu + .saps-tag-menu {
+      margin-left: 0.5rem;
+    }
   }
   .saps-tag-menu .inputs-3a86ea-checkbox > label {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.74rem;
+    font-size: 0.68rem;
     color: #2b2b2b;
     font-weight: 500;
     white-space: nowrap;
@@ -162,6 +201,7 @@ author_profile: false
 
     const wrapMenu = (form, labelText) => {
       if (!form || form.closest('.saps-tag-menu')) return;
+
       const wrapper = document.createElement('details');
       wrapper.className = 'saps-tag-menu';
       wrapper.open = false;
@@ -169,8 +209,50 @@ author_profile: false
       const summary = document.createElement('summary');
       summary.textContent = labelText;
 
-      form.replaceWith(wrapper);
-      wrapper.append(summary, form);
+      const panel = document.createElement('div');
+      panel.className = 'saps-tag-menu__panel';
+
+      const actions = document.createElement('div');
+      actions.className = 'saps-tag-menu__actions';
+
+      const selectAll = document.createElement('button');
+      selectAll.type = 'button';
+      selectAll.className = 'saps-tag-menu__action';
+      selectAll.textContent = 'Select all';
+
+      const deselectAll = document.createElement('button');
+      deselectAll.type = 'button';
+      deselectAll.className = 'saps-tag-menu__action';
+      deselectAll.textContent = 'Deselect all';
+
+      const applySelection = (checked) => {
+        const boxes = [...form.querySelectorAll('input[type="checkbox"]')];
+        boxes.forEach((box) => {
+          if (box.checked !== checked) {
+            box.checked = checked;
+            box.dispatchEvent(new Event('input', {bubbles: true}));
+            box.dispatchEvent(new Event('change', {bubbles: true}));
+          }
+        });
+      };
+
+      selectAll.addEventListener('click', (event) => {
+        event.preventDefault();
+        applySelection(true);
+      });
+
+      deselectAll.addEventListener('click', (event) => {
+        event.preventDefault();
+        applySelection(false);
+      });
+
+      const parent = form.parentNode;
+      if (!parent) return;
+
+      parent.insertBefore(wrapper, form);
+      wrapper.append(summary, panel);
+      actions.append(selectAll, deselectAll);
+      panel.append(actions, form);
     };
 
     queueMicrotask(() => {

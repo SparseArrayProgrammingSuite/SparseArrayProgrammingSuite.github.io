@@ -169,6 +169,11 @@ footer:
 include:
   - .htaccess
   - _pages
+  # Observable's generated asset directories start with underscores.
+  - _observablehq
+  - _npm
+  - _file
+  - _import
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
@@ -192,6 +197,9 @@ exclude:
   - node_modules
   - package.json
   - package-lock.json
+  - observablehq.config.js
+  - build_asv_summary.py
+  - scripts
   - Rakefile
   - README
   - tmp

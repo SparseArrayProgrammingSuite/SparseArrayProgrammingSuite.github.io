@@ -4,7 +4,12 @@ export default {
 
   // Path to the root of the project
   root: "docs",
-
-  // Data loaders run under Poetry
-  interpreters: {".py": ["poetry", "run", "python3"]}
+  output: "assets/leaderboard",
+  theme: "light",
+  head: "<style>#observablehq-main {min-height: 0;}</style>",
+  sidebar: false,
+  header: false,
+  footer: false,
+  pager: false,
+  toc: false
 };

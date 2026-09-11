@@ -33,6 +33,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Observable
+        run: npm ci
+      - name: Test competition data and profile
+        run: npm test
       - name: Setup Ruby
         # https://github.com/ruby/setup-ruby/releases/tag/v1.207.0
         uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4
@@ -88,8 +101,12 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-      - name: Fetch benchmark metadata
-        run: curl --fail --silent --show-error --location --output _data/metadata.json https://raw.githubusercontent.com/SparseArrayProgrammingSuite/SparseArrayProgrammingSuite/main/metadata.json
+      - name: Fetch latest competition results and build CSVs
+        run: python3 scripts/build_competition_data.py --metadata-output _data/metadata.json
+      - name: Build Observable leaderboard
+        run: npm run build
+        env:
+          OBSERVABLE_TELEMETRY_DISABLE: '1'
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"

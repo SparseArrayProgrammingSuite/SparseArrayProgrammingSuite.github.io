@@ -4,9 +4,11 @@ title: Performance profile
 
 ```js
 import {buildProfile} from "./components/profile.js";
-const results = FileAttachment("./data/results.csv").csv();
-const benchmarks = FileAttachment("./data/benchmarks.csv").csv();
-const run = FileAttachment("./data/run.json").json();
+const [results, benchmarks, run] = await Promise.all([
+  FileAttachment("./data/results.csv").csv(),
+  FileAttachment("./data/benchmarks.csv").csv(),
+  FileAttachment("./data/run.json").json()
+]);
 const profile = buildProfile(results, benchmarks, run.frameworks);
 ```
 

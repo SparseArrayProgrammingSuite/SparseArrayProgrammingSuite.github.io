@@ -10,3 +10,9 @@ assets/icons/apple-touch-icon.png
 assets/icons/icon-192.png
 assets/icons/icon-512.png
 /favicon.ico
+node_modules/
+docs/.observablehq/
+docs/data/*.csv
+docs/data/run.json
+assets/leaderboard/
+__pycache__/

@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: single
 title: "Sparse Array Programming Suite"
 author_profile: false
 ---

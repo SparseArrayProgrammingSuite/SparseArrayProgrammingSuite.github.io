@@ -101,9 +101,7 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-      - name: Fetch latest competition results and build CSVs
-        run: python3 scripts/build_competition_data.py --metadata-output _data/metadata.json
-      - name: Build Observable leaderboard
+      - name: Fetch latest competition data and build Observable leaderboard
         run: npm run build
         env:
           OBSERVABLE_TELEMETRY_DISABLE: '1'

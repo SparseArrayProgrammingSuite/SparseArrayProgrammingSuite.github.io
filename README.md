@@ -56,9 +56,12 @@ npm run build
 bundle exec jekyll build
 ```
 
-Observable writes to `assets/leaderboard/`, which Jekyll copies to the site.
-The GitHub Actions workflow fetches the latest competition snapshot and metadata
-before building Observable and Jekyll. Generated data and chart assets are ignored
+`npm run build` automatically fetches the latest competition run, generates both
+CSVs, and updates `_data/metadata.json` before building Observable. No separate
+`npm run data` step is needed for a site build. Observable writes to
+`assets/leaderboard/`, which Jekyll copies to the site.
+The GitHub Actions workflow uses the same build command before building Jekyll.
+Generated CSVs and chart assets are ignored
 by Git. A new suite run appears on the next website build; use the workflow's
 manual trigger to refresh without changing this repository.
 

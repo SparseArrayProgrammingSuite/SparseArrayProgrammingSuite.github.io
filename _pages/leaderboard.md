@@ -38,9 +38,9 @@ author_profile: false
   }
   .saps-tag-menu {
     display: inline-block;
-    min-width: 11.5rem;
-    width: 11.5rem;
-    max-width: 14rem;
+    min-width: 0;
+    width: 13rem;
+    max-width: 13rem;
     position: relative;
     vertical-align: top;
   }
@@ -73,8 +73,8 @@ author_profile: false
     content: "▴";
   }
   .saps-tag-menu__panel {
-    margin-top: 0.5rem;
-    padding: 0.7rem 0.8rem;
+    margin-top: 0.25rem;
+    padding: 0.35rem 0.5rem;
     border: 1px solid #d9d9e3;
     border-radius: 0.75rem;
     background: #fff;
@@ -83,14 +83,17 @@ author_profile: false
     left: 0;
     z-index: 20;
     box-sizing: border-box;
-    width: 100%;
-    max-width: 100%;
-    min-width: 12rem;
+    width: 13rem;
+    max-width: 13rem;
+    min-width: 0;
+    max-height: 15rem;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .saps-tag-menu__actions {
     display: flex;
-    gap: 0.35rem;
-    margin-bottom: 0.5rem;
+    gap: 0.2rem;
+    margin-bottom: 0.2rem;
     position: relative;
     z-index: 30;
   }
@@ -100,21 +103,21 @@ author_profile: false
     border-radius: 999px;
     background: #f6f3fb;
     color: #4f2f82;
-    font-size: 0.62rem;
+    font-size: 0.56rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     font-weight: 700;
-    padding: 0.28rem 0.5rem;
+    padding: 0.2rem 0.38rem;
     line-height: 1.2;
     cursor: pointer;
   }
   .saps-tag-menu .inputs-3a86ea-checkbox {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.15rem;
     width: 100%;
     max-width: 100%;
-    min-width: 12rem;
+    min-width: 0;
     background: transparent;
     border: 0;
     box-shadow: none;
@@ -124,6 +127,22 @@ author_profile: false
     z-index: auto;
     box-sizing: border-box;
   }
+  .saps-tag-menu__section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .saps-tag-menu__section + .saps-tag-menu__section {
+    margin-top: 0.25rem;
+  }
+  .saps-tag-menu__section-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #625b79;
+    font-weight: 700;
+    padding: 0.04rem 0;
+  }
   .saps-tag-menu + .saps-tag-menu {
     margin-left: 0;
   }
@@ -132,14 +151,21 @@ author_profile: false
       margin-left: 0.5rem;
     }
   }
-  .saps-tag-menu .inputs-3a86ea-checkbox > label {
+  .saps-tag-menu .inputs-3a86ea-checkbox label {
     display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 0.68rem;
+    align-items: flex-start;
+    gap: 0.25rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-right: 0;
+    font-size: 0.58rem;
     color: #2b2b2b;
     font-weight: 500;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.2;
   }
   .saps-tag-menu .inputs-3a86ea-checkbox > label:first-child {
     display: none;
@@ -196,6 +222,23 @@ author_profile: false
       .filter((tag) => !hiddenTags.has(tag))
       .sort();
 
+    const workloadTags = new Set([
+      "high-dimensional",
+      "tensor",
+      "large-query",
+      "elementary-ops",
+      "transcendental-ops",
+      "shape-ops",
+      "linalg-ops",
+      "fancy-ops",
+      "index-ops",
+      "nonzero-fill",
+      "iterative",
+      "dense",
+      "hypersparse",
+      "dynamic-sparsity"
+    ]);
+
     const keep = view(Inputs.checkbox(allTags, {label: "Include tags", value: allTags}));
     const drop = view(Inputs.checkbox(allTags, {label: "Exclude tags", value: []}));
 
@@ -244,6 +287,36 @@ author_profile: false
       deselectAll.addEventListener('click', (event) => {
         event.preventDefault();
         applySelection(false);
+      });
+
+      const sectionOrder = ['workload', 'concepts'];
+      const sectionMap = new Map();
+      sectionOrder.forEach((name) => {
+        const section = document.createElement('div');
+        section.className = 'saps-tag-menu__section';
+        const heading = document.createElement('div');
+        heading.className = 'saps-tag-menu__section-label';
+        heading.textContent = name;
+        section.appendChild(heading);
+        sectionMap.set(name, section);
+      });
+
+      const labels = [...form.querySelectorAll('label')].filter((label) => {
+        const text = (label.textContent || '').trim();
+        return text && !/Include tags|Exclude tags/i.test(text);
+      });
+
+      labels.forEach((label) => {
+        const tag = (label.textContent || '').trim();
+        const sectionKey = workloadTags.has(tag) ? 'workload' : 'concepts';
+        const section = sectionMap.get(sectionKey);
+        if (section) section.appendChild(label);
+      });
+
+      form.innerHTML = '';
+      sectionOrder.forEach((name) => {
+        const section = sectionMap.get(name);
+        if (section && section.childElementCount > 1) form.appendChild(section);
       });
 
       const parent = form.parentNode;

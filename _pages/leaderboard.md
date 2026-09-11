@@ -38,9 +38,11 @@ author_profile: false
   }
   .saps-tag-menu {
     display: inline-block;
-    min-width: 12rem;
-    max-width: 18rem;
+    min-width: 14rem;
+    width: 14rem;
+    max-width: 16rem;
     position: relative;
+    vertical-align: top;
   }
   .saps-tag-menu summary {
     list-style: none;
@@ -48,8 +50,9 @@ author_profile: false
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0.45rem 0.8rem;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.45rem 0.85rem;
     border: 1px solid #d9d9e3;
     border-radius: 999px;
     background: #f6f3fb;
@@ -58,11 +61,13 @@ author_profile: false
     text-transform: uppercase;
     color: #4f2f82;
     font-weight: 700;
+    line-height: 1.2;
+    box-sizing: border-box;
   }
   .saps-tag-menu summary::-webkit-details-marker { display: none; }
   .saps-tag-menu summary::after {
     content: "▾";
-    font-size: 0.8rem;
+    font-size: 0.72rem;
   }
   .saps-tag-menu[open] summary::after {
     content: "▴";
@@ -73,19 +78,26 @@ author_profile: false
     gap: 0.35rem;
     margin-top: 0.5rem;
     width: 100%;
-    padding: 0.6rem 0.7rem;
+    max-width: 100%;
+    min-width: 12rem;
+    padding: 0.7rem 0.8rem;
     border: 1px solid #d9d9e3;
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0 0.5rem 1rem rgba(30, 30, 30, 0.06);
     position: absolute;
+    left: 0;
     z-index: 20;
+    box-sizing: border-box;
+  }
+  .saps-tag-menu + .saps-tag-menu {
+    margin-left: 0.75rem;
   }
   .saps-tag-menu .inputs-3a86ea-checkbox > label {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8rem;
+    gap: 0.45rem;
+    font-size: 0.74rem;
     color: #2b2b2b;
     font-weight: 500;
     white-space: nowrap;
@@ -152,7 +164,7 @@ author_profile: false
       if (!form || form.closest('.saps-tag-menu')) return;
       const wrapper = document.createElement('details');
       wrapper.className = 'saps-tag-menu';
-      wrapper.open = true;
+      wrapper.open = false;
 
       const summary = document.createElement('summary');
       summary.textContent = labelText;

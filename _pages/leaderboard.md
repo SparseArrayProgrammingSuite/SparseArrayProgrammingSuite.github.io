@@ -371,22 +371,3 @@ author_profile: false
   }});
 
 </script>
-
-# Workload Tags
-
-Each benchmark/dataset is tagged with workload descriptors, discovered programatically through tracing:
-
-- `high-dimensional`: 5 or more dimensions in a tensor.
-- `tensor`: 3 or more dimensions in a tensor.
-- `large-query`: 5 or more operands on one line.
-- `elementary-ops`: PEMDAS-only.
-- `transcendental-ops`: contains sin, cos, pow, exp, or related operations.
-- `shape-ops`: reshape, concat, transpose, squeeze, or similar operations.
-- `linalg-ops`: contains `xp.linalg` or solver-like operations. `dot` is okay.
-- `fancy-ops`: min, max, and, or, shift, or similar operations.
-- `index-ops`: contains indexing.
-- `nonzero-fill`: uses a fill value other than zero.
-- `iterative`: loops over a matrix or repeats until convergence.
-- `dense`: exclusively dense problems.
-- `hypersparse`: contains hypersparsity, such as `nnz << n` for a dimension.
-- `dynamic-sparsity`: sparse-sparse interactions may change the sparsity pattern.

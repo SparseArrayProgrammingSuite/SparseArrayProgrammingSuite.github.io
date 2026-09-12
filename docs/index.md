@@ -104,6 +104,12 @@ title: Performance profile
   .saps-tag-menu { min-width: 100%; }
   .saps-tag-menu__panel { width: min(18rem, calc(100vw - 4rem)); }
 }
+/* Right-aligns the color legend above the chart (see the `className:
+   "saps-plot"` option passed to Plot.plot below). */
+.saps-plot-figure {
+  justify-content: right;
+  margin: 0.1rem 0.5rem;
+}
 </style>
 
 ```js
@@ -199,6 +205,7 @@ const curves = total === 0 ? [] : Object.entries(profile.series).flatMap(([frame
 
 ```js
 total === 0 ? html`<p role="status">No problems match these tags.</p>` : Plot.plot({
+  className: "saps-plot",
   width,
   x: {type: "log", domain: [1, profile.xMax], label: "Ratio (runtime / best runtime)"},
   y: {domain: [0, 100], grid: true, label: "% of suite completed"},

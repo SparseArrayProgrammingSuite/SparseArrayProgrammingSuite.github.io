@@ -44,6 +44,23 @@ author_profile: false
     position: relative;
     vertical-align: top;
   }
+  .saps-tag-count-left {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.65rem;
+    margin-right: 0.5rem;
+    font-size: 0.68rem;
+    line-height: 1;
+    color: #ffffff;
+    background: #4f2f82;
+    border-radius: 999px;
+    font-weight: 700;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    box-sizing: border-box;
+    position: relative;
+    transform: translateY(1px);
+  }
   .saps-tag-menu summary {
     list-style: none;
     cursor: pointer;
@@ -266,6 +283,32 @@ author_profile: false
     const keep = view(Inputs.checkbox(allTags, {label: "Include tags", value: []}));
     const drop = view(Inputs.checkbox(allTags, {label: "Exclude tags", value: []}));
 
+    const updateCount = () => {
+      const root = document.querySelector('#observablehq-main');
+      if (!root) return;
+
+      const keepForm = root.querySelector('.saps-tag-menu[data-menu-label="Include tags"] form');
+      const dropForm = root.querySelector('.saps-tag-menu[data-menu-label="Exclude tags"] form');
+
+      const getTags = (frm) => {
+        if (!frm) return [];
+        const checked = Array.from(frm.querySelectorAll('input[type="checkbox"]:checked'));
+        return checked.map((cb) => cb.closest('label')?.textContent?.trim() || '');
+      };
+
+      const keep = getTags(keepForm);
+      const drop = getTags(dropForm);
+
+      const ok = profile.problems.map((p) =>
+        (keep.length === 0 || p.tags.some((t) => keep.includes(t))) &&
+        !p.tags.some((t) => drop.includes(t))
+      );
+      const count = ok.filter(Boolean).length;
+
+      const keepLeft = root.querySelector('.saps-tag-count-left[data-menu-label="Include tags"]');
+      if (keepLeft) keepLeft.textContent = `${count}`;
+    };
+
     const wrapMenu = (form, labelText) => {
       if (!form || form.closest('.saps-tag-menu')) return;
 
@@ -275,6 +318,8 @@ author_profile: false
 
       const summary = document.createElement('summary');
       summary.textContent = labelText;
+
+      // no inline pill badge; count shown to the left only
 
       const panel = document.createElement('div');
       panel.className = 'saps-tag-menu__panel';
@@ -315,6 +360,29 @@ author_profile: false
       parent.insertBefore(wrapper, form);
       wrapper.append(summary, panel);
       panel.append(form);
+
+      // mark wrapper so we can find it later
+      wrapper.dataset.menuLabel = labelText;
+
+      // insert a left-side badge only for the Include tags menu so the
+      // count appears to the left of that pill. Keep it if present.
+      if (labelText === 'Include tags') {
+        let leftBadge = parent.querySelector('.saps-tag-count-left[data-menu-label="' + labelText + '"]');
+        if (!leftBadge) {
+          leftBadge = document.createElement('span');
+          leftBadge.className = 'saps-tag-count-left';
+          leftBadge.dataset.menuLabel = labelText;
+          parent.insertBefore(leftBadge, wrapper);
+        }
+      }
+
+      // when the form changes, update the count
+      form.addEventListener('change', () => {
+        updateCount();
+      });
+
+      // set initial count after wrapping
+      updateCount();
     };
 
     queueMicrotask(() => {
@@ -333,6 +401,9 @@ author_profile: false
       };
 
       wrapVisibleForms();
+
+      // initial count
+      updateCount();
 
       const observer = new MutationObserver(() => {
         wrapVisibleForms();

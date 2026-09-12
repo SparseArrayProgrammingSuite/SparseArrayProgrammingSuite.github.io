@@ -27,20 +27,20 @@ author_profile: false
     color: inherit;
   }
   .saps-observable .observablehq--block {
-    margin: 0 0 0.75rem;
+    margin: 0;
   }
   .saps-observable .observablehq--block form {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.0rem;
     align-items: flex-start;
     margin: 0;
   }
   .saps-tag-menu {
     display: inline-block;
     min-width: 0;
-    width: 13rem;
-    max-width: 13rem;
+    width: 9.7rem;
+    max-width: 9.7rem;
     position: relative;
     vertical-align: top;
   }
@@ -49,7 +49,7 @@ author_profile: false
     align-items: center;
     justify-content: center;
     padding: 0.35rem 0.65rem;
-    margin-right: 0.5rem;
+    margin-right: 0.2rem;
     font-size: 0.68rem;
     line-height: 1;
     color: #ffffff;
@@ -100,8 +100,8 @@ author_profile: false
     left: 0;
     z-index: 20;
     box-sizing: border-box;
-    width: 13rem;
-    max-width: 13rem;
+    width: 9.7rem;
+    max-width: 9.7rem;
     min-width: 0;
     max-height: 15rem;
     overflow-y: auto;
@@ -165,7 +165,7 @@ author_profile: false
   }
   @media (min-width: 42rem) {
     .saps-tag-menu + .saps-tag-menu {
-      margin-left: 0.5rem;
+      margin-left: 0.2rem;
     }
   }
   .saps-tag-menu .inputs-3a86ea-checkbox label {
@@ -194,6 +194,10 @@ author_profile: false
     .saps-tag-menu { min-width: 100%; }
     .saps-tag-menu .inputs-3a86ea-checkbox { width: min(18rem, calc(100vw - 4rem)); }
   }
+  .plot-d6a7b5-figure {
+    justify-content: right;
+    margin: 0;
+  }
 </style>
 {%- assign inputs_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_observablehq/stdlib/inputs.'" | first -%}
 {%- if inputs_file -%}
@@ -202,9 +206,9 @@ author_profile: false
 
 <div id="observablehq-center" class="saps-observable">
   <main id="observablehq-main" class="observablehq">
-    <div class="observablehq observablehq--block"><!--:03c27090:--></div>
+    <div class="observablehq observablehq--block" ><!--:03c27090:--></div>
     <div class="observablehq observablehq--block"><!--:7ebc449c:--></div>
-    <div class="observablehq observablehq--block"><!--:2d01d479:--></div>
+    <div class="observablehq observablehq--block" style="display: none;"><!--:2d01d479:--></div>
     <div class="observablehq observablehq--block"><observablehq-loading></observablehq-loading><!--:a415e9ad:--></div>
     <p>Results from <observablehq-loading></observablehq-loading><!--:7688b8fd:-->. Each benchmark has equal weight, divided among its selected datasets.
     At 1×, a framework matches the fastest runtime for a problem. At 2×, it takes at most twice as long. Failed measurements remain in the suite but do not contribute successes. Include tags match any selection; exclude tags must be absent.</p>

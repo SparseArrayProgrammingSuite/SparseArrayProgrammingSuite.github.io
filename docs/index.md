@@ -3,6 +3,16 @@ title: Performance profile
 ---
 
 <style>
+.saps-tag-menu-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.saps-tag-count {
+  font-size: 0.68rem;
+  color: var(--theme-foreground-muted, #625b79);
+}
 .saps-tag-menu {
   display: inline-block;
   min-width: 0;
@@ -10,9 +20,6 @@ title: Performance profile
   max-width: 9.7rem;
   position: relative;
   vertical-align: top;
-}
-.saps-tag-menu + .saps-tag-menu {
-  margin-left: 0.4rem;
 }
 .saps-tag-menu summary {
   list-style: none;
@@ -23,7 +30,7 @@ title: Performance profile
   gap: 0.45rem;
   width: 100%;
   padding: 0.4rem 0.75rem;
-  border: 1px solid var(--theme-foreground-faintest);
+  border: 1px solid var(--theme-foreground-faintest, #d9d9e3);
   border-radius: 999px;
   font-size: 0.68rem;
   letter-spacing: 0.04em;
@@ -45,9 +52,9 @@ title: Performance profile
 .saps-tag-menu__panel {
   margin-top: 0.25rem;
   padding: 0.35rem 0.5rem;
-  border: 1px solid var(--theme-foreground-faintest);
+  border: 1px solid var(--theme-foreground-faintest, #d9d9e3);
   border-radius: 0.75rem;
-  background: var(--theme-background);
+  background: var(--theme-background, #fff);
   box-shadow: 0 0.5rem 1rem rgba(30, 30, 30, 0.06);
   position: absolute;
   left: 0;
@@ -72,7 +79,7 @@ title: Performance profile
   font-size: 0.52rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--theme-foreground-muted);
+  color: var(--theme-foreground-muted, #625b79);
   font-weight: 700;
   padding: 0.04rem 0;
 }
@@ -135,8 +142,32 @@ const groupOf = (tag) => workloadTags.has(tag) ? "workload" : "concepts";
 const allTags = [...new Set(profile.problems.flatMap((p) => p.tags))]
   .filter((tag) => !hiddenTags.has(tag))
   .sort();
-const keep = view(tagMenu(allTags, {label: "Include tags", groupOf, groupOrder: ["workload", "concepts"]}));
-const drop = view(tagMenu(allTags, {label: "Exclude tags", groupOf, groupOrder: ["workload", "concepts"]}));
+
+const keepMenu = tagMenu(allTags, {label: "Include tags", groupOf, groupOrder: ["workload", "concepts"]});
+const dropMenu = tagMenu(allTags, {label: "Exclude tags", groupOf, groupOrder: ["workload", "concepts"]});
+
+const countEl = document.createElement("span");
+countEl.className = "saps-tag-count";
+function updateCount() {
+  const keep = keepMenu.value;
+  const drop = dropMenu.value;
+  const kept = profile.problems.filter((p) =>
+    (keep.length === 0 || p.tags.some((t) => keep.includes(t))) &&
+    !p.tags.some((t) => drop.includes(t))
+  ).length;
+  countEl.textContent = `${kept} problems`;
+}
+keepMenu.addEventListener("input", updateCount);
+dropMenu.addEventListener("input", updateCount);
+updateCount();
+
+const row = document.createElement("div");
+row.className = "saps-tag-menu-row";
+row.append(keepMenu, dropMenu, countEl);
+display(row);
+
+const keep = Generators.input(keepMenu);
+const drop = Generators.input(dropMenu);
 ```
 
 ```js
@@ -168,7 +199,6 @@ const curves = total === 0 ? [] : Object.entries(profile.series).flatMap(([frame
 
 ```js
 total === 0 ? html`<p role="status">No problems match these tags.</p>` : Plot.plot({
-  title: `${ok.filter(Boolean).length} problems`,
   width,
   x: {type: "log", domain: [1, profile.xMax], label: "Ratio (runtime / best runtime)"},
   y: {domain: [0, 100], grid: true, label: "% of suite completed"},

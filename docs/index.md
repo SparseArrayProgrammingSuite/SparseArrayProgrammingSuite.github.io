@@ -155,18 +155,6 @@ const dropMenu = tagMenu(allTags, {label: "Exclude tags", groupOf, groupOrder: [
 
 const countEl = document.createElement("span");
 countEl.className = "saps-tag-count";
-function updateCount() {
-  const keep = keepMenu.value;
-  const drop = dropMenu.value;
-  const kept = profile.problems.filter((p) =>
-    (keep.length === 0 || p.tags.some((t) => keep.includes(t))) &&
-    !p.tags.some((t) => drop.includes(t))
-  ).length;
-  countEl.textContent = `${kept} problems`;
-}
-keepMenu.addEventListener("input", updateCount);
-dropMenu.addEventListener("input", updateCount);
-updateCount();
 
 const row = document.createElement("div");
 row.className = "saps-tag-menu-row";
@@ -178,10 +166,13 @@ const drop = Generators.input(dropMenu);
 ```
 
 ```js
+const keepSet = new Set(keep);
+const dropSet = new Set(drop);
 const ok = profile.problems.map((p) =>
-  (keep.length === 0 || p.tags.some((t) => keep.includes(t))) &&
-  !p.tags.some((t) => drop.includes(t))
+  (keepSet.size === 0 || p.tags.some((t) => keepSet.has(t))) &&
+  !p.tags.some((t) => dropSet.has(t))
 );
+countEl.textContent = `${ok.filter(Boolean).length} problems`;
 
 const nKept = new Map();
 profile.problems.forEach((p, i) => {

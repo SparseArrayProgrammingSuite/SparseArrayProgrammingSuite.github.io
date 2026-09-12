@@ -15,18 +15,21 @@ const outputPath = path.join(root, "_pages", "leaderboard.md");
 
 const html = readFileSync(buildHtmlPath, "utf8");
 
-const scriptMatch = html.match(/<script type="module">([\s\S]*?)<\/script>/);
-if (!scriptMatch) throw new Error(`No <script type="module"> found in ${buildHtmlPath}`);
+function extract(re, what) {
+  const match = html.match(re);
+  if (!match) throw new Error(`No ${what} found in ${buildHtmlPath}`);
+  return match[1];
+}
+
 // Observable's build emits paths (imports, registerFile) relative to
 // assets/leaderboard/index.html; the Jekyll page lives at /leaderboard/
 // instead, so root-absolute the paths under the real build output location.
-const script = scriptMatch[1]
+const script = extract(/<script type="module">([\s\S]*?)<\/script>/, "<script type=\"module\">")
   .replace(/(["'])\.\/(_observablehq|_import|_npm|_file)/g, "$1/assets/leaderboard/$2")
   .trim();
 
-const mainMatch = html.match(/<main id="observablehq-main" class="observablehq">([\s\S]*?)<\/main>/);
-if (!mainMatch) throw new Error(`No #observablehq-main content found in ${buildHtmlPath}`);
-const body = mainMatch[1].trim();
+const body = extract(/<main id="observablehq-main" class="observablehq">([\s\S]*?)<\/main>/, "#observablehq-main content")
+  .trim();
 
 const template = readFileSync(templatePath, "utf8");
 const output = template

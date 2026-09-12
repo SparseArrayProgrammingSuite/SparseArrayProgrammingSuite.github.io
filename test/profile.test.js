@@ -44,7 +44,7 @@ test("dataset identities include generator and preserve numeric-looking names", 
 // Execute the actual weighting cell so the original plot's math stays covered.
 const page = readFileSync(new URL("../docs/index.md", import.meta.url), "utf8");
 const cell = [...page.matchAll(/```js\n([\s\S]*?)\n```/g)].map((match) => match[1]).find((code) => code.includes("const ok ="));
-const curvesFor = new Function("profile", "keep", "drop", `${cell}\nreturn {curves, total};`);
+const curvesFor = new Function("profile", "keep", "drop", "countEl", `${cell}\nreturn {curves, total};`);
 
 test("the page awaits both CSVs and the run metadata before building the profile", async () => {
   const loadCell = [...page.matchAll(/```js\n([\s\S]*?)\n```/g)][0][1].replace(/^import .*;\n/m, "");
@@ -64,8 +64,9 @@ test("the plot weights benchmarks equally and recomputes weights after tag filte
     {benchmark: "A", tags: ["dense"]}, {benchmark: "A", tags: ["sparse"]},
     {benchmark: "B", tags: ["dense"]}
   ], series: {a: [[0, 1], [2, 2]], failed: []}};
-  assert.equal(curvesFor(profile, [], []).curves.filter((point) => point.framework === "a").at(-1).pct, 75);
-  assert.equal(curvesFor(profile, ["dense"], []).curves.filter((point) => point.framework === "a").at(-1).pct, 100);
-  assert.deepEqual(curvesFor(profile, ["dense"], ["dense"]), {curves: [], total: 0});
-  assert.deepEqual(curvesFor(profile, [], []).curves.filter((point) => point.framework === "failed").map((point) => point.pct), [0, 0]);
+  const countEl = {};
+  assert.equal(curvesFor(profile, [], [], countEl).curves.filter((point) => point.framework === "a").at(-1).pct, 75);
+  assert.equal(curvesFor(profile, ["dense"], [], countEl).curves.filter((point) => point.framework === "a").at(-1).pct, 100);
+  assert.deepEqual(curvesFor(profile, ["dense"], ["dense"], countEl), {curves: [], total: 0});
+  assert.deepEqual(curvesFor(profile, [], [], countEl).curves.filter((point) => point.framework === "failed").map((point) => point.pct), [0, 0]);
 });

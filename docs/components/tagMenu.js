@@ -23,8 +23,9 @@ export function tagMenu(tags, {
 
   const groups = new Map(groupOrder.map((name) => [name, []]));
   for (const tag of tags) {
-    if (!groups.has(groupOf(tag))) groups.set(groupOf(tag), []);
-    groups.get(groupOf(tag)).push(tag);
+    const name = groupOf(tag);
+    if (!groups.has(name)) groups.set(name, []);
+    groups.get(name).push(tag);
   }
 
   const inputs = [];

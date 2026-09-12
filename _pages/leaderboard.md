@@ -196,7 +196,7 @@ author_profile: false
   }
   .plot-d6a7b5-figure {
     justify-content: right;
-    margin: 0;
+    margin: 0.1rem 0.5rem;
   }
 </style>
 {%- assign inputs_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_observablehq/stdlib/inputs.'" | first -%}

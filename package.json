@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "rm -rf docs/.observablehq/cache",
     "prebuild": "npm run data -- --metadata-output _data/metadata.json",
-    "build": "observable build",
+    "build": "observable build && node scripts/build_leaderboard_page.mjs",
     "dev": "observable preview",
     "data": "python3 scripts/build_competition_data.py",
     "test": "python3 -m unittest discover -s test && node --test test/*.test.js",

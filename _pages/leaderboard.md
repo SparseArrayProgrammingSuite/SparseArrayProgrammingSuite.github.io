@@ -208,7 +208,7 @@ author_profile: false
   <main id="observablehq-main" class="observablehq">
     <div class="observablehq observablehq--block" ><!--:03c27090:--></div>
     <div class="observablehq observablehq--block"><!--:7ebc449c:--></div>
-    <div class="observablehq observablehq--block" style="display: none;"><!--:2d01d479:--></div>
+    <div class="observablehq observablehq--block"><!--:2d01d479:--></div>
     <div class="observablehq observablehq--block"><observablehq-loading></observablehq-loading><!--:a415e9ad:--></div>
     <p>Results from <observablehq-loading></observablehq-loading><!--:7688b8fd:-->. Each benchmark has equal weight, divided among its selected datasets.
     At 1×, a framework matches the fastest runtime for a problem. At 2×, it takes at most twice as long. Failed measurements remain in the suite but do not contribute successes. Include tags match any selection; exclude tags must be absent.</p>

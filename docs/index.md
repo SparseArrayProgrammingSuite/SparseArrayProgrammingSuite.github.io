@@ -114,7 +114,6 @@ title: Performance profile
 
 ```js
 import {buildProfile} from "./components/profile.js";
-import {tagMenu} from "./components/tagMenu.js";
 const [results, benchmarks, run] = await Promise.all([
   FileAttachment("./data/results.csv").csv(),
   FileAttachment("./data/benchmarks.csv").csv(),
@@ -126,6 +125,8 @@ const profile = buildProfile(results, benchmarks, run.frameworks);
 Results from ${html`<a href=${run.resultsUrl} target="_blank" rel="noopener">${run.run}</a>`}. Each benchmark has equal weight, divided among its selected datasets.
 
 ```js
+import {tagMenu} from "./components/tagMenu.js";
+
 const hiddenTags = new Set(["standard", "test", "trace"]);
 const workloadTags = new Set([
   "high-dimensional",

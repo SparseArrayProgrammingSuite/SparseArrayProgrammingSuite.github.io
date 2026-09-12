@@ -203,11 +203,11 @@ author_profile: false
 <div id="observablehq-center" class="saps-observable">
   <main id="observablehq-main" class="observablehq">
     <div class="observablehq observablehq--block"><!--:03c27090:--></div>
-    <p>Results from <observablehq-loading></observablehq-loading><!--:7688b8fd:-->. Each benchmark has equal weight, divided among its selected datasets.</p>
     <div class="observablehq observablehq--block"><!--:7ebc449c:--></div>
     <div class="observablehq observablehq--block"><!--:2d01d479:--></div>
     <div class="observablehq observablehq--block"><observablehq-loading></observablehq-loading><!--:a415e9ad:--></div>
-    <p>At 1×, a framework matches the fastest runtime for a problem. At 2×, it takes at most twice as long. Failed measurements remain in the suite but do not contribute successes. Include tags match any selection; exclude tags must be absent.</p>
+    <p>Results from <observablehq-loading></observablehq-loading><!--:7688b8fd:-->. Each benchmark has equal weight, divided among its selected datasets.
+    At 1×, a framework matches the fastest runtime for a problem. At 2×, it takes at most twice as long. Failed measurements remain in the suite but do not contribute successes. Include tags match any selection; exclude tags must be absent.</p>
   </main>
 </div>
 
@@ -303,10 +303,11 @@ author_profile: false
         (keep.length === 0 || p.tags.some((t) => keep.includes(t))) &&
         !p.tags.some((t) => drop.includes(t))
       );
-      const count = ok.filter(Boolean).length;
+      const kept = ok.filter(Boolean).length;
+      const total = profile.problems.length || 0;
 
       const keepLeft = root.querySelector('.saps-tag-count-left[data-menu-label="Include tags"]');
-      if (keepLeft) keepLeft.textContent = `${count}`;
+      if (keepLeft) keepLeft.textContent = `${kept} problems`;
     };
 
     const wrapMenu = (form, labelText) => {
@@ -446,21 +447,20 @@ author_profile: false
     const plotData = curves.length ? curves : [{framework: "", ratio: 1, pct: 0}, {framework: "", ratio: 1, pct: 0}];
     display(await (
       Plot.plot({
-        title: `${ok.filter(Boolean).length} problems`,
-        width,
-        x: {type: "log", domain: [1, Math.max(1, profile.xMax)], label: "Ratio (runtime / best runtime)"},
-        y: {domain: [0, 100], grid: true, label: "% of suite completed"},
-        color: {legend: true, domain: Object.keys(profile.series)},
-        marks: [
-          Plot.line(plotData, {
-            x: "ratio",
-            y: "pct",
-            stroke: "framework",
-            curve: "step-after",
-            strokeWidth: 3,
-            tip: true
-          })
-        ]
+      width,
+      x: {type: "log", domain: [1, Math.max(1, profile.xMax)], label: "Target Performance Ratio (runtime / best runtime)"},
+      y: {domain: [0, 100], grid: true, label: "% of suite completed"},
+      color: {legend: true, domain: Object.keys(profile.series)},
+      marks: [
+        Plot.line(plotData, {
+          x: "ratio",
+          y: "pct",
+          stroke: "framework",
+          curve: "step-after",
+          strokeWidth: 3,
+          tip: true
+        })
+      ]
       })
     ))
   }});

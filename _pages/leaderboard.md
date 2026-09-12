@@ -178,7 +178,10 @@ author_profile: false
     .saps-tag-menu .inputs-3a86ea-checkbox { width: min(18rem, calc(100vw - 4rem)); }
   }
 </style>
-<link rel="stylesheet" type="text/css" href="{{ '/assets/leaderboard/_observablehq/stdlib/inputs.f7bf0e12.css' | relative_url }}">
+{%- assign inputs_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_observablehq/stdlib/inputs.'" | first -%}
+{%- if inputs_file -%}
+  <link rel="stylesheet" type="text/css" href="{{ inputs_file.path | relative_url }}">
+{%- endif -%}
 
 <div id="observablehq-center" class="saps-observable">
   <main id="observablehq-main" class="observablehq">
@@ -192,15 +195,36 @@ author_profile: false
 </div>
 
 <script type="module">
-  import {define} from "{{ '/assets/leaderboard/_observablehq/client.189d7a0d.js' | relative_url }}";
-  import {registerFile} from "{{ '/assets/leaderboard/_observablehq/stdlib.81cd90e3.js' | relative_url }}";
+  {%- assign client_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_observablehq/client.'" | first -%}
+  {%- assign stdlib_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_observablehq/stdlib.'" | first -%}
+  {%- assign profile_import = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_import/components/profile.'" | first -%}
+  {%- assign benchmarks_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_file/data/benchmarks.'" | first -%}
+  {%- assign results_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_file/data/results.'" | first -%}
+  {%- assign run_file = site.static_files | where_exp: "f", "f.path contains '/assets/leaderboard/_file/data/run.'" | first -%}
 
-  registerFile("./data/benchmarks.csv", {"name":"./data/benchmarks.csv","mimeType":"text/csv","path":"{{ '/assets/leaderboard/_file/data/benchmarks.c1e63a4d.csv' | relative_url }}","lastModified":1789162235465,"size":1127968});
-  registerFile("./data/results.csv", {"name":"./data/results.csv","mimeType":"text/csv","path":"{{ '/assets/leaderboard/_file/data/results.2ce9b38c.csv' | relative_url }}","lastModified":1789162235438,"size":245230});
-  registerFile("./data/run.json", {"name":"./data/run.json","mimeType":"application/json","path":"{{ '/assets/leaderboard/_file/data/run.d161b0e4.json' | relative_url }}","lastModified":1789162235465,"size":339});
+  {%- if client_file -%}
+    import {define} from "{{ client_file.path | relative_url }}";
+  {%- endif -%}
+  {%- if stdlib_file -%}
+    import {registerFile} from "{{ stdlib_file.path | relative_url }}";
+  {%- endif -%}
+
+  {%- if benchmarks_file -%}
+    registerFile("./data/benchmarks.csv", {"name":"./data/benchmarks.csv","mimeType":"text/csv","path":"{{ benchmarks_file.path | relative_url }}"});
+  {%- endif -%}
+  {%- if results_file -%}
+    registerFile("./data/results.csv", {"name":"./data/results.csv","mimeType":"text/csv","path":"{{ results_file.path | relative_url }}"});
+  {%- endif -%}
+  {%- if run_file -%}
+    registerFile("./data/run.json", {"name":"./data/run.json","mimeType":"application/json","path":"{{ run_file.path | relative_url }}"});
+  {%- endif -%}
 
   define({id: "03c27090", inputs: ["FileAttachment"], outputs: ["buildProfile","results","benchmarks","run","profile"], body: async (FileAttachment) => {
-    const {buildProfile} = await import("{{ '/assets/leaderboard/_import/components/profile.1c1f73f4.js' | relative_url }}");
+    {%- if profile_import -%}
+      const {buildProfile} = await import("{{ profile_import.path | relative_url }}");
+    {%- else -%}
+      throw new Error('Observable profile component not found: /assets/leaderboard/_import/components/profile.*');
+    {%- endif -%}
     const [results, benchmarks, run] = await Promise.all([
       FileAttachment("./data/results.csv").csv(),
       FileAttachment("./data/benchmarks.csv").csv(),

@@ -14,7 +14,7 @@ The suite adapts real applications to a portable array-programming style. This c
     {% assign has_standard_dataset = false %}
     {% for generator in benchmark.generators %}
       {% for dataset in generator.datasets %}
-        {% if dataset.tags contains "standard" %}
+        {% if dataset.tags contains "suite-standard" %}
           {% assign has_standard_dataset = true %}
         {% endif %}
       {% endfor %}
